@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nramos.cabifymobilechallenge">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -15,7 +17,7 @@
         android:theme="@style/Theme.CabifyMobileChallenge"
         tools:targetApi="31">
         <activity
-            android:name=".ui.CabifyChallengeActivity"
+            android:name=".CabifyChallengeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

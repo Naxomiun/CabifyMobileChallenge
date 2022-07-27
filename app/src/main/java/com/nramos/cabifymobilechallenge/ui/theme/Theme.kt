@@ -1,5 +1,6 @@
 package com.nramos.cabifymobilechallenge.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -8,14 +9,25 @@ import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
     primary = PrimaryPurple,
-    primaryVariant = SecondaryPurple,
+    primaryVariant = PrimaryPurple,
+    secondary = SecondaryPurple,
+    secondaryVariant = SecondaryPurple,
     background = BackgroundBlack,
+    onBackground = BackgroundWhite,
+    onSecondary = BackgroundWhite,
+    onPrimary = BackgroundBlack
 )
 
+@SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
     primary = PrimaryPurple,
     primaryVariant = SecondaryPurple,
+    secondary = SecondaryPurple,
+    secondaryVariant = SecondaryPurple,
     background = BackgroundWhite,
+    onBackground = BackgroundBlack,
+    onSecondary = BackgroundWhite,
+    onPrimary = BackgroundBlack
 
     /* Other default colors to override
     background = Color.White,

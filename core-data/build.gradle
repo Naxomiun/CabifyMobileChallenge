@@ -34,6 +34,11 @@ android {
 }
 
 dependencies {
+    //Modules
+    implementation(project(":core-domain"))
+
+    //Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${libraries.coroutines}"
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"

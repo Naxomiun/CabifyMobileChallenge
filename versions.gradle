@@ -5,6 +5,7 @@ ext {
             activityCompose      : '1.5.0',
             coilCompose          : "2.1.0",
             hiltNavigationCompose: '1.0.0',
+            materialComponents   : "1.6.1",
             coreKtx              : "1.8.0",
             appCompat            : "1.4.2",
             activityKtx          : "1.4.0",
@@ -13,7 +14,9 @@ ext {
             lifecycleKtx         : "2.5.0-rc01",
             lifecycleExtensions  : "2.2.0",
             retrofit             : "2.9.0",
-            httplogginInterceptor: "5.0.0-alpha.7"
+            httplogginInterceptor: "5.0.0-alpha.7",
+            coroutines           : "1.6.1",
+            javaInject           : "1"
     ]
 
 }

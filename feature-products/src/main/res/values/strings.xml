@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CabifyMobileChallenge</string>
+
+    <string name="products_title">Products</string>
+    <string name="products_cart_button_desc">Go to shopping cart screen</string>
+    <string name="products_add_to_cart">Add to cart</string>
+
+</resources>

@@ -59,6 +59,9 @@ dependencies {
     implementation(project(':core-data'))
     implementation(project(':core-domain'))
 
+    //Base
+    implementation "com.google.android.material:material:${libraries.materialComponents}"
+
     //Compose
     implementation "androidx.activity:activity-compose:${libraries.activityCompose}"
     implementation "androidx.compose.material:material:$compose"

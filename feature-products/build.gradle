@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 apply from: rootProject.file('versions.gradle')
@@ -22,16 +24,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose
+    }
+    
 }
 
 dependencies {
+    //Modules
+    implementation(project(":core-domain"))
+
     //CHECK
     implementation "androidx.core:core-ktx:${libraries.coreKtx}"
     implementation "androidx.appcompat:appcompat:${libraries.appCompat}"
@@ -48,6 +64,10 @@ dependencies {
     implementation "io.coil-kt:coil-compose:${libraries.coilCompose}"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose"
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${libraries.lifecycleKtx}"
