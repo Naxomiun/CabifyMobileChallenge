@@ -14,15 +14,14 @@ class DiscountsDatasource @Inject constructor(
         withContext(ioDispatcher) {
             listOf(
                 DiscountResponse(
-                    code = "1",
                     appliesTo = "VOUCHER",
-                    discountType = "2x1"
+                    discountType = "TWO_X_ONE"
                 ),
                 DiscountResponse(
-                    code = "1",
                     appliesTo = "TSHIRT",
-                    discountType = "bulk",
-                    quantity = 3,
+                    discountType = "BULK",
+                    minQuantity = 3,
+                    discountRate = 0.95,
                 )
             )
         }
