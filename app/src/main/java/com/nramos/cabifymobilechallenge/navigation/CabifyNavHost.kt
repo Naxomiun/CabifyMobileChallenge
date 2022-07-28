@@ -1,9 +1,6 @@
 package com.nramos.cabifymobilechallenge.navigation
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nramos.cabifymobilechallenge.core.navigation.Destination
 import com.nramos.cabifymobilechallenge.core.navigation.NavCommand
-import com.nramos.feature.products.ProductsScreen
+import com.nramos.cabifymobilechallenge.feature.products.ProductsScreen
 
 @Composable
 fun CabifyNavHost(
