@@ -27,7 +27,6 @@ class ProductsViewModel @Inject constructor(
     private fun getProductList() {
         viewModelScope.launch {
             val response = getProducts()
-            Log.e("YE", response.toString())
             _state.update {
                 it.copy(
                     isLoading = false,

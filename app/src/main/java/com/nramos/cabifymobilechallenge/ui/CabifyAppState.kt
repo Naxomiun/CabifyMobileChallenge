@@ -6,6 +6,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.nramos.cabifymobilechallenge.core.navigation.Destination
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -24,5 +25,13 @@ class AppState(
     val currentRoute: String
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination?.route
             ?: ""
+
+    fun navigate(destination: Destination) {
+        navController.navigate(destination.route)
+    }
+
+    fun onBackClick() {
+        navController.popBackStack()
+    }
 
 }

@@ -30,7 +30,7 @@ object ProductsMapper {
     }
 
     private fun getCurrencyCode(): String {
-        return "EUR";
+        return "€";
     }
 
 }

@@ -6,8 +6,11 @@ data class Product(
     val name: String,
     val price: Double,
     val currencyCode: String,
-    val mediaUrl: String
-)
+    val mediaUrl: String,
+    val discount: Discount? = null,
+) {
+    fun hasDiscount() = discount != null
+}
 
 enum class ProductType {
     UNKNOWN,
@@ -19,4 +22,5 @@ enum class ProductType {
         fun fromCode(code: String): ProductType =
             values().associateBy { it.name }[code] ?: UNKNOWN
     }
+
 }

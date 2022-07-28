@@ -41,14 +41,15 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose
     }
-    
+
 }
 
 dependencies {
     //Modules
     implementation(project(":core-domain"))
+    implementation(project(":core-navigation"))
 
-    //CHECK
+    //Base
     implementation "androidx.core:core-ktx:${libraries.coreKtx}"
     implementation "androidx.appcompat:appcompat:${libraries.appCompat}"
 

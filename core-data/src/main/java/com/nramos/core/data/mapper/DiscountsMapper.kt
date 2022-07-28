@@ -7,19 +7,21 @@ import com.nramos.core.domain.model.ProductType
 
 object DiscountsMapper {
 
-    fun fromDiscountsResponseToModel(discountResponse: DiscountResponse): Discount? {
-        val discountType = DiscountType.fromType(discountResponse.discountType)
-        val appliesTo = ProductType.fromCode(discountResponse.appliesTo)
-        return when(discountType) {
-            DiscountType.TWO_X_ONE -> Discount.TwoForOne(
-                appliesTo = appliesTo
-            )
-            DiscountType.BULK -> Discount.Bulk(
-                appliesTo = appliesTo,
-                minQuantity = discountResponse.minQuantity ?: 0,
-                discountRate = discountResponse.discountRate ?: 0.0,
-            )
-            else -> null
+    fun fromDiscountsResponseToModel(discountResponse: List<DiscountResponse>): List<Discount> {
+        return discountResponse.mapNotNull {
+            val discountType = DiscountType.fromType(it.discountType)
+            val appliesTo = ProductType.fromCode(it.appliesTo)
+            when(discountType) {
+                DiscountType.TWO_X_ONE -> Discount.TwoForOne(
+                    appliesTo = appliesTo
+                )
+                DiscountType.BULK -> Discount.Bulk(
+                    appliesTo = appliesTo,
+                    minQuantity = it.minQuantity ?: 0,
+                    discountRate = it.discountRate ?: 0.0,
+                )
+                else -> null
+            }
         }
     }
 

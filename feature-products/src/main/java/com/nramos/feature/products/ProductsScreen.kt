@@ -1,7 +1,6 @@
 package com.nramos.feature.products
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -11,11 +10,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,16 +21,17 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
+import com.nramos.cabifymobilechallenge.core.navigation.Destination
+import com.nramos.core.domain.model.Discount
 import com.nramos.core.domain.model.Product
-
 
 @Composable
 fun ProductsScreen(
     modifier: Modifier = Modifier,
-    viewModel: ProductsViewModel = viewModel()
+    navigateToCart: (Destination) -> Unit,
+    viewModel: ProductsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     ProductsView(
@@ -107,16 +105,24 @@ fun ProductItem(
     product: Product
 ) {
     Column {
-        AsyncImage(
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .fillMaxWidth()
-                .aspectRatio(1F),
-            model = product.mediaUrl,
-            alignment = Alignment.Center,
-            contentScale = ContentScale.Crop,
-            contentDescription = product.name
-        )
+        Box {
+            AsyncImage(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .fillMaxWidth()
+                    .aspectRatio(1F),
+                model = product.mediaUrl,
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Crop,
+                contentDescription = product.name
+            )
+            if (product.hasDiscount()) {
+                DiscountView(
+                    modifier = Modifier.align(Alignment.BottomStart),
+                    discount = product.discount!!
+                )
+            }
+        }
         Text(
             modifier = Modifier.padding(top = 5.dp),
             text = product.name,
@@ -182,4 +188,29 @@ fun CartFloatingButton(
         }
     }
 
+}
+
+@Composable
+fun DiscountView(
+    modifier: Modifier = Modifier,
+    discount: Discount
+) {
+    val title = when(discount) {
+        is Discount.Bulk -> stringResource(id = R.string.discount_2x1)
+        is Discount.TwoForOne -> stringResource(id = R.string.discount_bulk)
+    }
+
+    Text(
+        modifier = modifier
+            .padding(all = 8.dp)
+            .clip(RoundedCornerShape(50))
+            .background(MaterialTheme.colors.secondary)
+            .padding(horizontal = 10.dp, vertical = 3.dp),
+        text = title,
+        style = TextStyle(
+            fontSize = 12.sp,
+            color = MaterialTheme.colors.onSecondary,
+            fontWeight = FontWeight.Bold
+        )
+    )
 }

@@ -3,8 +3,6 @@ plugins {
     id 'kotlin-android'
 }
 
-apply from: rootProject.file('versions.gradle')
-
 android {
     compileSdk 32
 
@@ -29,15 +27,20 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose
+    }
 }
 
 dependencies {
 
-    //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${libraries.coroutines}"
-
-    //Injection
-    implementation "javax.inject:javax.inject:${libraries.javaInject}"
+    //Compose nav
+    implementation "androidx.navigation:navigation-compose:$nav_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

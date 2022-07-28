@@ -1,15 +1,19 @@
 package com.nramos.cabifymobilechallenge.ui
 
 import androidx.compose.runtime.Composable
+import com.nramos.cabifymobilechallenge.navigation.CabifyNavHost
 import com.nramos.cabifymobilechallenge.ui.theme.CabifyChallengeTheme
-import com.nramos.feature.products.ProductsScreen
 
 @Composable
 fun CabifyApp(
     appState: AppState = rememberAppState()
 ) {
     MainContent {
-        ProductsScreen()
+        CabifyNavHost(
+            navController = appState.navController,
+            onNavigation = appState::navigate,
+            onBackClick = appState::onBackClick
+        )
     }
 }
 
