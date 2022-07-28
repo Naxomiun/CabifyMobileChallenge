@@ -12,6 +12,7 @@ class DiscountsDatasource @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
+    //Function simulating backend call
     suspend fun getDiscounts(): List<Discount> =
         withContext(ioDispatcher) {
             DiscountsMapper.fromDiscountsResponseToModel(

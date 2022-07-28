@@ -1,6 +1,11 @@
 package com.nramos.cabifymobilechallenge.navigation
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
@@ -23,12 +28,16 @@ fun CabifyNavHost(
     NavHost(
         navController = navController,
         startDestination = Destination.Products.route,
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colors.background)
     ) {
         composable(NavCommand.ContentType(Destination.Products)) {
             ProductsScreen(
                 navigateToCart = onNavigation
             )
+        }
+
+        composable(NavCommand.ContentType(Destination.Cart)) {
+            Text("CART")
         }
     }
 }

@@ -1,12 +1,32 @@
 package com.nramos.feature.products
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Badge
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,34 +46,50 @@ import coil.compose.AsyncImage
 import com.nramos.cabifymobilechallenge.core.navigation.Destination
 import com.nramos.core.domain.model.Discount
 import com.nramos.core.domain.model.Product
+import com.nramos.core.presentation.ui.FullLoadingScreen
 
 @Composable
 fun ProductsScreen(
     modifier: Modifier = Modifier,
     navigateToCart: (Destination) -> Unit,
-    viewModel: ProductsViewModel = hiltViewModel()
+    viewModel: ProductsScreenViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.viewState.collectAsState()
     ProductsView(
         modifier = modifier,
-        state = state
+        state = state,
+        navigateToCart = { navigateToCart(Destination.Cart) },
+        onAddToCartClicked = { viewModel.addItemToCart(it) }
     )
 }
 
 @Composable
 fun ProductsView(
-    modifier: Modifier,
-    state: State
+    modifier: Modifier = Modifier,
+    state: ProductsScreenState,
+    navigateToCart: () -> Unit,
+    onAddToCartClicked: (Product) -> Unit
 ) {
-    Scaffold(
-        modifier = modifier,
-        backgroundColor = MaterialTheme.colors.background,
-        topBar = { ProductsTopBar() },
-        floatingActionButton = { CartFloatingButton() }
-    ) {
-        ProductList(
-            products = state.products
-        )
+    Box {
+        Scaffold(
+            modifier = modifier
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+            topBar = { ProductsTopBar() },
+            floatingActionButton = {
+                CartFloatingButton(
+                    itemsInOrder = state.order?.getTotalItemsInOrder() ?: 0,
+                    navigateToCart = navigateToCart
+                )
+            }
+        ) {
+            ProductList(
+                modifier = Modifier.padding(it),
+                products = state.products,
+                onAddToCartClicked = onAddToCartClicked
+            )
+        }
+        FullLoadingScreen(isLoading = state.spinnerLoading)
     }
 }
 
@@ -72,37 +108,46 @@ fun ProductsTopBar(
             style = TextStyle(
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.secondary
             ),
             fontSize = 21.sp
         )
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProductList(
     modifier: Modifier = Modifier,
-    products: List<Product>
+    products: List<Product>,
+    onAddToCartClicked: (Product) -> Unit
 ) {
-    LazyVerticalGrid(
-        modifier = modifier,
-        contentPadding = PaddingValues(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        cells = GridCells.Fixed(2)
-    ) {
-        items(products.size) { index ->
-            ProductItem(
-                product = products[index]
-            )
+    AnimatedContent(targetState = products.isNotEmpty()) {
+        if (it) {
+            LazyVerticalGrid(
+                modifier = modifier,
+                contentPadding = PaddingValues(15.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                columns = GridCells.Fixed(2)
+            ) {
+                items(products, key = { it.code }) {
+                    ProductItem(
+                        product = it,
+                        onAddToCartClicked = onAddToCartClicked
+                    )
+                }
+            }
+        } else {
+            ProductsLoaderView()
         }
     }
 }
 
 @Composable
 fun ProductItem(
-    product: Product
+    product: Product,
+    onAddToCartClicked: (Product) -> Unit
 ) {
     Column {
         Box {
@@ -149,7 +194,7 @@ fun ProductItem(
                 contentColor = MaterialTheme.colors.onSecondary
             ),
             shape = RoundedCornerShape(6.dp),
-            onClick = {}
+            onClick = { onAddToCartClicked(product) }
         ) {
             Text(text = stringResource(id = R.string.products_add_to_cart))
         }
@@ -158,33 +203,38 @@ fun ProductItem(
 
 @Composable
 fun CartFloatingButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToCart: () -> Unit,
+    itemsInOrder: Int,
 ) {
 
     Box(modifier) {
         FloatingActionButton(
             backgroundColor = MaterialTheme.colors.secondary,
             contentColor = MaterialTheme.colors.onSecondary,
-            onClick = { /*TODO*/ }
+            onClick = navigateToCart
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_shopping_cart),
                 contentDescription = stringResource(id = R.string.products_cart_button_desc)
             )
         }
-        Badge(
-            modifier = Modifier.align(Alignment.TopEnd),
-            backgroundColor = MaterialTheme.colors.onBackground,
-        ) {
-            Text(
-                modifier = Modifier.padding(1.dp),
-                text = "2",
-                fontSize = 10.sp,
-                style = TextStyle(
-                    color = MaterialTheme.colors.background,
-                    fontWeight = FontWeight.Bold
+
+        if (itemsInOrder != 0) {
+            Badge(
+                modifier = Modifier.align(Alignment.TopEnd),
+                backgroundColor = MaterialTheme.colors.onBackground,
+            ) {
+                Text(
+                    modifier = Modifier.padding(1.dp),
+                    text = itemsInOrder.toString(),
+                    fontSize = 10.sp,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.background,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -195,9 +245,9 @@ fun DiscountView(
     modifier: Modifier = Modifier,
     discount: Discount
 ) {
-    val title = when(discount) {
-        is Discount.Bulk -> stringResource(id = R.string.discount_2x1)
-        is Discount.TwoForOne -> stringResource(id = R.string.discount_bulk)
+    val title = when (discount) {
+        is Discount.TwoForOne -> stringResource(id = R.string.discount_2x1)
+        is Discount.Bulk -> stringResource(id = R.string.discount_bulk)
     }
 
     Text(
@@ -213,4 +263,19 @@ fun DiscountView(
             fontWeight = FontWeight.Bold
         )
     )
+}
+
+@Composable
+fun ProductsLoaderView(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            color = MaterialTheme.colors.secondary
+        )
+    }
 }

@@ -46,6 +46,7 @@ android {
 
 dependencies {
     //Modules
+    implementation(project(":core-presentation"))
     implementation(project(":core-domain"))
     implementation(project(":core-navigation"))
 

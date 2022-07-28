@@ -1,18 +1,19 @@
 package com.nramos.core.domain.model
 
-sealed class Discount {
+sealed interface Discount {
 
-    abstract val appliesTo: ProductType
+    val appliesTo: ProductType
 
     data class TwoForOne(
         override val appliesTo: ProductType
-    ) : Discount()
+    ) : Discount
 
     data class Bulk(
         override val appliesTo: ProductType,
         val minQuantity: Int,
         val discountRate: Double
-    ) : Discount()
+    ) : Discount
+
 }
 
 enum class DiscountType {
