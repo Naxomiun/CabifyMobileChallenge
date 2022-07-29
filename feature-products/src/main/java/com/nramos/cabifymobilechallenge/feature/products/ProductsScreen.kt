@@ -26,7 +26,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,9 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.nramos.cabifymobilechallenge.core.navigation.Destination
 import com.nramos.cabifymobilechallenge.core.domain.model.Discount
 import com.nramos.cabifymobilechallenge.core.domain.model.Product
+import com.nramos.cabifymobilechallenge.core.navigation.Destination
+import com.nramos.cabifymobilechallenge.core.presentation.ui.AppTopBar
 import com.nramos.cabifymobilechallenge.core.presentation.ui.FullLoadingScreen
 
 @Composable
@@ -75,7 +75,11 @@ fun ProductsView(
             modifier = modifier
                 .statusBarsPadding()
                 .navigationBarsPadding(),
-            topBar = { ProductsTopBar() },
+            topBar = {
+                AppTopBar(
+                    title = stringResource(id = R.string.products_title)
+                )
+            },
             floatingActionButton = {
                 CartFloatingButton(
                     itemsInOrder = state.order?.getTotalItemsInOrder() ?: 0,
@@ -90,28 +94,6 @@ fun ProductsView(
             )
         }
         FullLoadingScreen(isLoading = state.spinnerLoading)
-    }
-}
-
-@Composable
-fun ProductsTopBar(
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        modifier = modifier,
-        backgroundColor = MaterialTheme.colors.background
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            text = stringResource(id = R.string.products_title),
-            style = TextStyle(
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.secondary
-            ),
-            fontSize = 21.sp
-        )
     }
 }
 

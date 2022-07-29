@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.nramos.cabifymobilechallenge.core.navigation.Destination
 import com.nramos.cabifymobilechallenge.core.navigation.NavCommand
+import com.nramos.cabifymobilechallenge.feature.cart.CartScreen
 import com.nramos.cabifymobilechallenge.feature.products.ProductsScreen
 
 @Composable
@@ -34,11 +34,10 @@ fun CabifyNavHost(
         }
 
         composable(NavCommand.ContentType(Destination.Cart)) {
-            Text("CART")
+            CartScreen()
         }
     }
 }
-
 
 private fun NavGraphBuilder.composable(
     navCommand: NavCommand,

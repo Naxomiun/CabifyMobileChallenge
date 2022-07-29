@@ -17,6 +17,7 @@ rootProject.name = "CabifyMobileChallenge"
 include ':app'
 include ':core-domain'
 include ':core-data'
-include ':feature-products'
 include ':core-navigation'
 include ':core-presentation'
+include ':feature-products'
+include ':feature-cart'

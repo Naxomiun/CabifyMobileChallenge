@@ -46,7 +46,8 @@ fun CabifyChallengeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @C
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
-        color = Color.Transparent
+        color = Color.Transparent,
+        darkIcons = !darkTheme
     )
 
     val colors = if (darkTheme) {
