@@ -222,7 +222,11 @@ fun CartTotalView(
     order: Order
 ) {
     if (order.items.isNotEmpty()) {
-        Column(modifier.fillMaxWidth()) {
+        Column(
+            modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.background),
+        ) {
             Divider(
                 color = MaterialTheme.colors.onBackground.copy(alpha = 0.4F),
                 modifier = Modifier
@@ -230,8 +234,7 @@ fun CartTotalView(
             )
             Row(
                 modifier = modifier
-                    .padding(vertical = 15.dp)
-                    .background(MaterialTheme.colors.background),
+                    .padding(vertical = 15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
