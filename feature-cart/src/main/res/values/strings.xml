@@ -1,3 +1,5 @@
 <resources>
     <string name="cart_title">My cart</string>
+    <string name="cart_remove_item">Remove item</string>
+    <string name="cart_total">Total</string>
 </resources>

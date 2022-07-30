@@ -1,6 +1,5 @@
 package com.nramos.cabifymobilechallenge.core.domain.usecase
 
-import com.nramos.cabifymobilechallenge.core.domain.model.CartItem
 import com.nramos.cabifymobilechallenge.core.domain.model.Order
 import com.nramos.cabifymobilechallenge.core.domain.model.Product
 import com.nramos.cabifymobilechallenge.core.domain.repository.CartRepository
@@ -11,12 +10,8 @@ class AddItemToCart @Inject constructor(
 ) {
 
     suspend operator fun invoke(product: Product): Order {
-        return cartRepository.addItemToCart(
-            CartItem(
-                product = product,
-                quantity = 1
-            )
-        )
+        cartRepository.addItemToCart(product)
+        return cartRepository.getCartOrder()
     }
 
 }

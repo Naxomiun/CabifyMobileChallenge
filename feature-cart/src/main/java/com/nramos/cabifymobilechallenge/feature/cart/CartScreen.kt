@@ -3,36 +3,23 @@ package com.nramos.cabifymobilechallenge.feature.cart
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,13 +38,15 @@ fun CartScreen(
     CartView(
         modifier = modifier,
         state = state,
+        removeItemClicked = viewModel::removeItemFromCart
     )
 }
 
 @Composable
 fun CartView(
     modifier: Modifier = Modifier,
-    state: CartScreenState
+    state: CartScreenState,
+    removeItemClicked: (CartItem) -> Unit
 ) {
     Box {
         Scaffold(
@@ -72,7 +61,8 @@ fun CartView(
         ) {
             CartList(
                 modifier = Modifier.padding(it),
-                order = state.order
+                order = state.order,
+                removeItemClicked = removeItemClicked
             )
         }
         FullLoadingScreen(isLoading = state.spinnerLoading)
@@ -83,20 +73,35 @@ fun CartView(
 @Composable
 fun CartList(
     modifier: Modifier = Modifier,
-    order: Order?
+    order: Order?,
+    removeItemClicked: (CartItem) -> Unit
 ) {
     AnimatedContent(targetState = order != null) {
         if (it) {
-            LazyColumn(
-                modifier = modifier,
-                contentPadding = PaddingValues(15.dp),
-                verticalArrangement = Arrangement.spacedBy(15.dp)
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
-                items(order!!.items) { item ->
-                    CartItemView(
-                        item = item,
-                    )
+                LazyColumn(
+                    modifier = modifier,
+                    contentPadding = PaddingValues(
+                        start = 15.dp,
+                        end = 15.dp,
+                        top = 15.dp,
+                        bottom = 100.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                ) {
+                    items(order!!.items) { item ->
+                        CartItemView(
+                            item = item,
+                            removeItemClicked = removeItemClicked
+                        )
+                    }
                 }
+                CartTotalView(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    order = order!!
+                )
             }
         }
     }
@@ -105,7 +110,8 @@ fun CartList(
 @Composable
 fun CartItemView(
     modifier: Modifier = Modifier,
-    item: CartItem
+    item: CartItem,
+    removeItemClicked: (CartItem) -> Unit
 ) {
     Row(modifier) {
         AsyncImage(
@@ -117,27 +123,93 @@ fun CartItemView(
             contentDescription = item.product.name,
             contentScale = ContentScale.Crop
         )
-        Column {
+        Column(
+            modifier = Modifier.padding(start = 15.dp)
+        ) {
             Row(
-                modifier = Modifier.background(Color.Red),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .weight(1F),
-                    text = item.product.price.toString(),
+                    text = "${item.totalPriceWithDiscounts} ${item.product.currencyCode}",
                     style = TextStyle(
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null
+
+                if (item.totalPriceWithDiscounts != item.totalPrice) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        text = "${item.totalPrice} ${item.product.currencyCode}",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Normal,
+                            textDecoration = TextDecoration.LineThrough
+                        )
                     )
+                }
+
+                Spacer(Modifier.weight(1F))
+
+                IconButton(
+                    modifier = Modifier
+                        .size(18.dp),
+                    onClick = { removeItemClicked(item) },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_remove),
+                        contentDescription = stringResource(id = R.string.cart_remove_item),
+                        tint = MaterialTheme.colors.onBackground,
+                    )
+                }
+            }
+
+            Text(
+                text = item.product.name,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            )
+
+            Row(
+                modifier = Modifier.padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (item.quantity > 1) {
+                    Text(
+                        modifier = Modifier
+                            .padding(end = 10.dp),
+                        text = "x${item.quantity}",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp),
+                        text = "${item.pricePerUnitWithDiscount} ${item.product.currencyCode}",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    )
+
+                    if (item.pricePerUnitWithDiscount != item.pricePerUnit) {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp),
+                            text = "${item.pricePerUnit} ${item.product.currencyCode}",
+                            style = TextStyle(
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Normal,
+                                textDecoration = TextDecoration.LineThrough
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -145,9 +217,60 @@ fun CartItemView(
 }
 
 @Composable
-fun cartTotal(
+fun CartTotalView(
     modifier: Modifier = Modifier,
-    order: Order?
+    order: Order
 ) {
+    if (order.items.isNotEmpty()) {
+        Column(modifier.fillMaxWidth()) {
+            Divider(
+                color = MaterialTheme.colors.onBackground.copy(alpha = 0.4F),
+                modifier = Modifier
+                    .height(0.3.dp)
+            )
+            Row(
+                modifier = modifier
+                    .padding(vertical = 15.dp)
+                    .background(MaterialTheme.colors.background),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 15.dp)
+                        .weight(1F),
+                    text = stringResource(id = R.string.cart_total),
+                    style = TextStyle(
+                        color = MaterialTheme.colors.onBackground,
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
 
+                Column(
+                    modifier = Modifier.padding(horizontal = 15.dp),
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    Text(
+                        text = "${order.totalPriceWithDiscounts} ${order.getOrderCurrencyCode()}",
+                        style = TextStyle(
+                            color = MaterialTheme.colors.onBackground,
+                            fontSize = 23.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    if (order.hasDiscounts()) {
+                        Text(
+                            text = "${order.totalPrice} ${order.getOrderCurrencyCode()}",
+                            style = TextStyle(
+                                color = MaterialTheme.colors.onBackground,
+                                fontSize = 19.sp,
+                                fontWeight = FontWeight.Normal,
+                                textDecoration = TextDecoration.LineThrough
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

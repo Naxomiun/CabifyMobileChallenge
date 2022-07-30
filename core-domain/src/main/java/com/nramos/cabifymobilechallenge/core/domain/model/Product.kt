@@ -4,7 +4,7 @@ data class Product(
     val code: String,
     val type: ProductType,
     val name: String,
-    val price: Double,
+    var price: Double,
     val currencyCode: String,
     val mediaUrl: String,
     val discount: Discount? = null,

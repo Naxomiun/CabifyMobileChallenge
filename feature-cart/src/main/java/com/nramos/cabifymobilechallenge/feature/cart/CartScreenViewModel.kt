@@ -2,6 +2,7 @@ package com.nramos.cabifymobilechallenge.feature.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nramos.cabifymobilechallenge.core.domain.model.CartItem
 import com.nramos.cabifymobilechallenge.core.presentation.redux.Store
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
@@ -26,6 +27,12 @@ class CartScreenViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             store.dispatch(CartScreenAction.FetchOrder)
+        }
+    }
+
+    fun removeItemFromCart(cartItem: CartItem) {
+        viewModelScope.launch {
+            store.dispatch(CartScreenAction.RemoveItemClicked(cartItem))
         }
     }
 

@@ -59,7 +59,7 @@ fun ProductsScreen(
         modifier = modifier,
         state = state,
         navigateToCart = { navigateToCart(Destination.Cart) },
-        onAddToCartClicked = { viewModel.addItemToCart(it) }
+        onAddToCartClicked = viewModel::addItemToCart
     )
 }
 

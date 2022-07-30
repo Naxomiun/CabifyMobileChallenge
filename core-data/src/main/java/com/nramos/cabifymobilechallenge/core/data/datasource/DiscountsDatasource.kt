@@ -24,7 +24,7 @@ class DiscountsDatasource @Inject constructor(
                     DiscountResponse(
                         appliesTo = "TSHIRT",
                         discountType = "BULK",
-                        minQuantity = 3,
+                        quantity = 3,
                         discountRate = 0.95,
                     )
                 )

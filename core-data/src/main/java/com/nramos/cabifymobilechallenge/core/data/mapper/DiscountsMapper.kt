@@ -17,7 +17,7 @@ object DiscountsMapper {
                 )
                 DiscountType.BULK -> Discount.Bulk(
                     appliesTo = appliesTo,
-                    minQuantity = it.minQuantity ?: 0,
+                    minQuantity = it.quantity ?: 0,
                     discountRate = it.discountRate ?: 0.0,
                 )
                 else -> null
