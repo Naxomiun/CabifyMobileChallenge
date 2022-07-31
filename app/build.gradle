@@ -5,17 +5,15 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-apply from: rootProject.file('versions.gradle')
-
 android {
-    compileSdk 32
+    compileSdk App.compileSkd
 
     defaultConfig {
-        applicationId "com.nramos.cabifymobilechallenge"
-        minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        applicationId App.applicationId
+        minSdk App.minSdk
+        targetSdk App.targetSdk
+        versionCode App.versionCode
+        versionName App.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,40 +43,18 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose
-    }
-
-    sourceSets{
-        main.java.srcDirs += 'src/main/kotlin/'
+        kotlinCompilerExtensionVersion Compose.composeCompiler
     }
 }
 
+provideCompose(this)
+provideHilt(this)
+provideAccompanist(this)
+
 dependencies {
-    //Modules
     implementation(project(":feature-products"))
     implementation(project(":feature-cart"))
     implementation(project(":core-navigation"))
     implementation(project(':core-data'))
     implementation(project(':core-domain'))
-
-    //Base
-    implementation "com.google.android.material:material:${libraries.materialComponents}"
-
-    //Compose
-    implementation "androidx.activity:activity-compose:${libraries.activityCompose}"
-    implementation "androidx.compose.material:material:$compose"
-    implementation "androidx.compose.animation:animation:$compose"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose"
-    implementation "androidx.navigation:navigation-compose:$nav_version"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:${libraries.accompanist}"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose"
-
-    //Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }

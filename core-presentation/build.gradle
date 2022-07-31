@@ -3,14 +3,12 @@ plugins {
     id 'kotlin-android'
 }
 
-apply from: rootProject.file('versions.gradle')
-
 android {
-    compileSdk 32
+    compileSdk App.compileSkd
 
     defaultConfig {
-        minSdk 21
-        targetSdk 32
+        minSdk App.minSdk
+        targetSdk App.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -22,29 +20,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         compose true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion compose
+        kotlinCompilerExtensionVersion Compose.composeCompiler
     }
+
 }
 
-dependencies {
-    //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${libraries.coroutines}"
-
-    //Compose
-    implementation "androidx.compose.material:material:$compose"
-    implementation "androidx.compose.animation:animation:$compose"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose"
-}
+provideCoroutines(this)
+provideCompose(this)
