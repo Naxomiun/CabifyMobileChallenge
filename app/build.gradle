@@ -5,48 +5,11 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-android {
-    compileSdk App.compileSkd
+//Android
+setAndroidModule(this)
+setCompose(this)
 
-    defaultConfig {
-        applicationId App.applicationId
-        minSdk App.minSdk
-        targetSdk App.targetSdk
-        versionCode App.versionCode
-        versionName App.versionName
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        debug {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    buildFeatures {
-        compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion Compose.composeCompiler
-    }
-}
-
+//Dependencies
 provideCompose(this)
 provideHilt(this)
 provideAccompanist(this)
