@@ -6,23 +6,23 @@ import com.nramos.cabifymobilechallenge.core.presentation.redux.State
 import com.nramos.cabifymobilechallenge.core.presentation.redux.Store
 
 /*
-    Middleware for testing purposes. Stores every processed action.
+ * Middleware for testing purposes. Stores every processed action.
  */
 class RegisterActionMiddleware<S: State, A: Action> : Middleware<S, A> {
 
-    private val actionRegister: MutableList<Action> = mutableListOf()
+    private val actionsRegistered: MutableList<Action> = mutableListOf()
 
     override suspend fun process(action: A, currentState: S, store: Store<S, A>) {
         registerAction(action)
     }
 
     private fun registerAction(action: Action) {
-        actionRegister.add(action)
+        actionsRegistered.add(action)
     }
 
     fun checkIfActionsWereRegistered(vararg action: Action) {
         action.forEach {
-            assert(actionRegister.contains(it))
+            assert(actionsRegistered.contains(it))
         }
     }
 
