@@ -1,16 +1,16 @@
 package com.nramos.cabifymobilechallenge.feature.products
 
 import com.nramos.cabifymobilechallenge.core.domain.model.Product
-import com.nramos.cabifymobilechallenge.core.domain.usecase.AddItemToCart
-import com.nramos.cabifymobilechallenge.core.domain.usecase.GetProducts
+import com.nramos.cabifymobilechallenge.core.domain.usecase.AddItemToCartUseCase
+import com.nramos.cabifymobilechallenge.core.domain.usecase.GetProductsUseCase
 import com.nramos.cabifymobilechallenge.core.presentation.redux.Middleware
 import com.nramos.cabifymobilechallenge.core.presentation.redux.Store
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class ProductsScreenMiddleware @Inject constructor(
-    private val getProducts: GetProducts,
-    private val addItemToCart: AddItemToCart
+    private val getProductsUseCase: GetProductsUseCase,
+    private val addItemToCartUseCase: AddItemToCartUseCase
 ) : Middleware<ProductsScreenState, ProductsScreenAction> {
 
     override suspend fun process(
@@ -31,14 +31,14 @@ class ProductsScreenMiddleware @Inject constructor(
 
     private suspend fun processFetchProductsAction(store: Store<ProductsScreenState, ProductsScreenAction>) {
         store.dispatch(ProductsScreenAction.FetchProductsStarted)
-        val products = getProducts()
+        val products = getProductsUseCase()
         store.dispatch(ProductsScreenAction.FetchProductsSucceed(products = products))
     }
 
     private suspend fun processAddItemToCarAction(product: Product, store: Store<ProductsScreenState, ProductsScreenAction>) {
         store.dispatch(ProductsScreenAction.ProductAddedToCartStarted)
         delay(1000) //Simulate network call
-        val order = addItemToCart(product)
+        val order = addItemToCartUseCase(product)
         store.dispatch(ProductsScreenAction.ProductAddedToCartSucceed(order = order))
     }
 

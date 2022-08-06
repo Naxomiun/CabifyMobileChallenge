@@ -2,4 +2,6 @@
     <string name="cart_title">My cart</string>
     <string name="cart_remove_item">Remove item</string>
     <string name="cart_total">Total</string>
+    <string name="cart_empty_title">Your cart is empty</string>
+    <string name="cart_empty_description">Try adding some items to it</string>
 </resources>

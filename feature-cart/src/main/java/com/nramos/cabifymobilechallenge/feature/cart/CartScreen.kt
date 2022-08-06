@@ -2,12 +2,31 @@ package com.nramos.cabifymobilechallenge.feature.cart
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -59,7 +78,7 @@ fun CartView(
                 )
             },
         ) {
-            CartList(
+            CartContent(
                 modifier = Modifier.padding(it),
                 order = state.order,
                 removeItemClicked = removeItemClicked
@@ -71,38 +90,57 @@ fun CartView(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CartList(
+fun CartContent(
     modifier: Modifier = Modifier,
     order: Order?,
     removeItemClicked: (CartItem) -> Unit
 ) {
-    AnimatedContent(targetState = order != null) {
+    AnimatedContent(
+        modifier = modifier,
+        targetState = order != null
+    ) {
         if (it) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                LazyColumn(
-                    modifier = modifier,
-                    contentPadding = PaddingValues(
-                        start = 15.dp,
-                        end = 15.dp,
-                        top = 15.dp,
-                        bottom = 100.dp
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
-                ) {
-                    items(order!!.items) { item ->
-                        CartItemView(
-                            item = item,
-                            removeItemClicked = removeItemClicked
-                        )
-                    }
+                if(order!!.items.isNotEmpty()) {
+                    CartList(
+                        items = order.items,
+                        removeItemClicked = removeItemClicked
+                    )
+                } else {
+                    CartEmptyView()
                 }
                 CartTotalView(
                     modifier = Modifier.align(Alignment.BottomCenter),
-                    order = order!!
+                    order = order
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun CartList(
+    modifier: Modifier = Modifier,
+    items: List<CartItem>,
+    removeItemClicked: (CartItem) -> Unit
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(
+            start = 15.dp,
+            end = 15.dp,
+            top = 15.dp,
+            bottom = 100.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(15.dp)
+    ) {
+        items(items) { item ->
+            CartItemView(
+                item = item,
+                removeItemClicked = removeItemClicked
+            )
         }
     }
 }
@@ -275,5 +313,41 @@ fun CartTotalView(
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun CartEmptyView(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            modifier = Modifier.size(50.dp),
+            painter = painterResource(id = R.drawable.ic_empty_cart),
+            contentDescription = stringResource(id = R.string.cart_empty_description),
+            tint = MaterialTheme.colors.onBackground
+        )
+        Text(
+            modifier = Modifier.padding(vertical = 7.dp),
+            text = stringResource(id = R.string.cart_empty_title),
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground
+            )
+        )
+        Text(
+            text = stringResource(id = R.string.cart_empty_description),
+            style = TextStyle(
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colors.onBackground.copy(alpha = 0.5F)
+            )
+        )
     }
 }

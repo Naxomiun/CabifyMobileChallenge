@@ -5,7 +5,7 @@ import com.nramos.cabifymobilechallenge.core.domain.model.Product
 import com.nramos.cabifymobilechallenge.core.domain.repository.CartRepository
 import javax.inject.Inject
 
-class AddItemToCart @Inject constructor(
+class AddItemToCartUseCase @Inject constructor(
     private val cartRepository: CartRepository
 ) {
 

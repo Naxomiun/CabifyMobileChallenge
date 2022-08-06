@@ -5,7 +5,7 @@ import com.nramos.cabifymobilechallenge.core.domain.model.Order
 import com.nramos.cabifymobilechallenge.core.domain.repository.CartRepository
 import javax.inject.Inject
 
-class RemoveItemFromCart @Inject constructor(
+class RemoveItemFromCartUseCase @Inject constructor(
     private val cartRepository: CartRepository
 ) {
 
