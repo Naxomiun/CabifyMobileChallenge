@@ -18,7 +18,7 @@ This project uses Redux pattern to apply this MVI.
 
 ### How it works?
 
-#### States
+#### - States
 
 ```kotlin
 interface State
@@ -26,7 +26,7 @@ interface State
 
 Our state machine used to represent UI state. Every custom state implements this interface.
 
-#### Actions
+#### - Actions
 
 ```kotlin
 interface Action
@@ -34,7 +34,7 @@ interface Action
 
 Represent actions derived from user interactions and changes made by our domain logic.
 
-#### Reducers
+#### - Reducers
 
 ```kotlin
 interface Reducer<S: State, A: Action> {
@@ -44,7 +44,7 @@ interface Reducer<S: State, A: Action> {
 
 Given a current state and an action is the responsible for transforming and updating the state for each action.
 
-#### Middlewares
+#### - Middlewares
 
 ```kotlin
 interface Middleware<S: State, A: Action> {
@@ -53,7 +53,7 @@ interface Middleware<S: State, A: Action> {
 ````
 Given a current state,an action and a store is the responsible for executing business logic and dispatching actions accordingly.
 
-#### Store
+#### - Stores
 
 ```kotlin
 class Store<S: State, A: Action>(
@@ -84,5 +84,5 @@ Store is in charge of dispatching actions through every associated middleware an
 
 ### Modules
 
-The modularization per feature help to mantain the code decoupled and easily navigable. This helps to isolate bugs and improves parallel compilation in large codebases.
+The modularization per feature helps to maintain the code decoupled and easily navigable, helps to isolate bugs and improves parallel compilation in large codebases.
 
