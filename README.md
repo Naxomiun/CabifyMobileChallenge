@@ -3,8 +3,8 @@
 
 The developed application consists of two screens; the product screen and the cart screen.
 
-**Product Screen** shows every product fetched from backend, including price, promotion the possibility to add it to the cart.
-**Cart Screen** shows every item in your cart, with the promotion applied if any as well as the quantity, original and discounted prices and the original and discounted total.
+**Product Screen:** shows every product fetched from backend, including price, promotion the possibility to add it to the cart. <br/>
+**Cart Screen:** shows every item in your cart, with the promotion applied if any as well as the quantity, original and discounted prices and the original and discounted total.
 
 # Documentation
 
@@ -115,11 +115,10 @@ Some sample unit tests have been included in the project. These tests have been 
 
 ## Miscellaneous
 
-`CartDatasource` stores the cart items in memory to simulate backend. The cart has not been persisted because it should be the backend the one that give us the order to avoid inconsistencies.
-`DiscountsDatasource` simulates the backend to get the different discounts.
+`CartDatasource` stores the cart items in memory to simulate backend. The cart has not been persisted because it should be the backend the one that give us the order to avoid inconsistencies.<br/>
+`DiscountsDatasource` simulates the backend to get the different discounts.<br/>
 
-`CartRepository logic` cart repository is in charge of calculate the associated discounts oof the different products and quantities. Why not do it in the use case? Well, in this case, I assume that every time we fetch the cart, we need to get the discounts too. Therefore if we delegate this logic to a use case we run the risk that another developer does not know the existence of this use case and directly accesses the repository skipping the calculation of discounts or any other mandatory logic.
-
+`CartRepository logic` cart repository is in charge of calculate the associated discounts oof the different products and quantities. Why not do it in the use case? Well, in this case, I assume that every time we fetch the cart, we need to get the discounts too. Therefore if we delegate this logic to a use case we run the risk that another developer does not know the existence of this use case and directly accesses the repository skipping the calculation of discounts or any other mandatory logic.<br/>
 `ProductRepository logic` following the same logic explained above, every time we fetch the products, they have to come with their associated discount. 
 
 In this challenge, domain layer has been included for example purposes but because of the size of the actual project it is irrelevant and redundant. No logic is shared or so complex so that use cases have to be used; repositories can handle this well. Likewise, when our interfaces only have a single implementation with 'impl' suffix, it may be a sign that we do not need an interface in that case. This 'useless' interfaces also serve as an example for a scalable project.
