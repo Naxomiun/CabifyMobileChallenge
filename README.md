@@ -119,6 +119,7 @@ Some sample unit tests have been included in the project. These tests have been 
 `DiscountsDatasource` simulates the backend to get the different discounts.
 
 `CartRepository logic` cart repository is in charge of calculate the associated discounts oof the different products and quantities. Why not do it in the use case? Well, in this case, I assume that every time we fetch the cart, we need to get the discounts too. Therefore if we delegate this logic to a use case we run the risk that another developer does not know the existence of this use case and directly accesses the repository skipping the calculation of discounts or any other mandatory logic.
+
 `ProductRepository logic` following the same logic explained above, every time we fetch the products, they have to come with their associated discount. 
 
 In this challenge, domain layer has been included for example purposes but because of the size of the actual project it is irrelevant and redundant. No logic is shared or so complex so that use cases have to be used; repositories can handle this well. Likewise, when our interfaces only have a single implementation with 'impl' suffix, it may be a sign that we do not need an interface in that case. This 'useless' interfaces also serve as an example for a scalable project.
