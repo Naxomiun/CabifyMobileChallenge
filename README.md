@@ -92,7 +92,7 @@ Contains the App class & state and the single activity entry point together with
 ### Core-data
 Contains services, network & cache datasources and repositories implementations along with their corresponding models and mappers.
 
-### Core-domain #### (Optional layer)
+### Core-domain (Optional layer)
 Contains repository interfaces, use cases along with their corresponding models. This layer can be omitted if the domain logic is not commonly shared and can be delegated to repositories directly. In this case it is added only as an architectural demonstration.
 
 ### Core-navigation
