@@ -14,7 +14,7 @@ The selected MVx pattern this time is MVI.
 ## MVI
 
 MVI used hand in hand with compose allows an easy use of unidirectional data flow (UDF) and a simple way to compose UI through a state machine as the unique source of truth.
-This project uses Redux pattern to apply this MVI.
+This project uses Redux pattern to apply this MVI; this helps us to keep our classes and actions much cleaner, with less liabilities and easily testable. These patterns may not be useful in small projects like this one. The intention is to serve as an example of how what it can be achieved.
 
 ### How it works?
 
@@ -82,7 +82,43 @@ class Store<S: State, A: Action>(
 
 Store is in charge of dispatching actions through every associated middleware and reducing the current state. It holds the reference to our states.
 
-### Modules
+## Modules
 
-The modularization per feature helps to maintain the code decoupled and easily navigable, helps to isolate bugs and improves parallel compilation in large codebases.
+The modularization per feature helps to maintain the code decoupled and easily navigable, helps to isolate bugs and improves parallel compilation in large codebases. Each module contains its own dependency injection and resources.
 
+### App
+Contains the App class & state and the single activity entry point together with the main navigation host and base theme & properties.
+
+### Core-data
+Contains services, network & cache datasources and repositories implementations along with their corresponding models and mappers.
+
+### Core-domain #### (Optional layer)
+Contains repository interfaces, use cases along with their corresponding models. This layer can be omitted if the domain logic is not commonly shared and can be delegated to repositories directly. In this case it is added only as an architectural demonstration.
+
+### Core-navigation
+Contains any logic related too Compose Navigation so that all presentation modules that require it can communicate with each other.
+
+### Core-presentation
+Contains common elements to presentation such as redux basis or shared UI components.
+
+### Core-testing
+Contains common elements to testing such mocked dependencies, modules or utilities.
+
+### Feature-XXX
+Contains everything related to the presentation of this feature and its resources
+
+### Compose
+This project has been entirely developed with compose. Although many developers are reluctant with this, it has been decided to use it as an example of new technology and how it adapts to our architecture.
+
+## Testing
+Some sample unit tests have been included in the project. These tests have been focused on Redux testing because it seems to me the most interesting thing to discuss when choosing an MVI pattern approach.. These tests They do not cover all the functionalities but serve as an example. MockK used for mocking purposes.
+
+## Miscellaneous
+
+`CartDatasource` stores the cart items in memory to simulate backend. The cart has not been persisted because it should be the backend the one that give us the order to avoid inconsistencies.
+`DiscountsDatasource` simulates the backend to get the different discounts.
+
+`CartRepository logic` cart repository is in charge of calculate the associated discounts oof the different products and quantities. Why not do it in the use case? Well, in this case, I assume that every time we fetch the cart, we need to get the discounts too. Therefore if we delegate this logic to a use case we run the risk that another developer does not know the existence of this use case and directly accesses the repository skipping the calculation of discounts or any other mandatory logic.
+`ProductRepository logic` following the same logic explained above, every time we fetch the products, they have to come with their associated discount. 
+
+In this challenge, domain layer has been included for example purposes but because of the size of the actual project it is irrelevant and redundant. No logic is shared or so complex so that use cases have to be used; repositories can handle this well. Likewise, when our interfaces only have a single implementation with 'impl' suffix, it may be a sign that we do not need an interface in that case. This 'useless' interfaces also serve as an example for a scalable project.
