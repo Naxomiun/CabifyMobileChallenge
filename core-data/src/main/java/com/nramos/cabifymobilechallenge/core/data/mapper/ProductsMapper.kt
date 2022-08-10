@@ -23,7 +23,7 @@ object ProductsMapper {
     private fun getMediaUrlForProducts(productType: ProductType): String {
         return when(productType) {
             ProductType.UNKNOWN -> ""
-            ProductType.VOUCHER -> "https://theemperorsoldclothes.co.uk/wp-content/uploads/2019/11/Group-324.jpg"
+            ProductType.VOUCHER -> "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/268/772/products/gift-card_publicacion-1c95900952b5753d0116281095100788-1024-1024.jpg"
             ProductType.TSHIRT -> "https://sportofino.com/media/catalog/product/cache/d0e194cae1992f3f4431fdfab9f8e16a/0/8/080_17100495_white_02.jpg"
             ProductType.MUG -> "https://www.reusablecoffeecupexperts.com.au/35536-large_default/300ml-purple-sorrento-coffee-mug.jpg"
         }
